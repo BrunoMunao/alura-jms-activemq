@@ -1,1 +1,1 @@
-# alura-jms-activemq
+# Projeto do curso JMS e ActiveMQ
