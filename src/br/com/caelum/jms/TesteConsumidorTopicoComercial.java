@@ -11,9 +11,10 @@ import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.Session;
 import javax.jms.TextMessage;
+import javax.jms.Topic;
 import javax.naming.InitialContext;
 
-public class TesteConsumidor {
+public class TesteConsumidorTopicoComercial {
 
 	@SuppressWarnings("resource")
 	public static void main(String[] args) throws Exception {
@@ -22,11 +23,13 @@ public class TesteConsumidor {
 		ConnectionFactory factory = (ConnectionFactory) context.lookup("ConnectionFactory");
 		
 		Connection connection = factory.createConnection(); 
-		connection.start();
+		connection.setClientID("comercial");
+		connection.start();	
+
 		Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		
-		Destination fila = (Destination) context.lookup("financeiro");
-		MessageConsumer consumer = session.createConsumer(fila );
+		Topic topico = (Topic) context.lookup("loja");
+		MessageConsumer consumer = session.createDurableSubscriber(topico, "assinaturaComercial");
 		
 		consumer.setMessageListener(new MessageListener() {
 
