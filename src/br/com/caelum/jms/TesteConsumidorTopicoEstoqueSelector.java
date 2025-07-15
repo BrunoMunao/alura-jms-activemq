@@ -13,7 +13,7 @@ import javax.jms.TextMessage;
 import javax.jms.Topic;
 import javax.naming.InitialContext;
 
-public class TesteConsumidorTopicoEstoque {
+public class TesteConsumidorTopicoEstoqueSelector {
 
 	@SuppressWarnings("resource")
 	public static void main(String[] args) throws Exception {
@@ -28,7 +28,7 @@ public class TesteConsumidorTopicoEstoque {
 		Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		
 		Topic topico = (Topic) context.lookup("loja");
-		MessageConsumer consumer = session.createDurableSubscriber(topico, "assinaturaEstoque");
+		MessageConsumer consumer = session.createDurableSubscriber(topico, "assinaturaEstoque", "ebook is NULL OR ebook = false", false);
 		
 		consumer.setMessageListener(new MessageListener() {
 
