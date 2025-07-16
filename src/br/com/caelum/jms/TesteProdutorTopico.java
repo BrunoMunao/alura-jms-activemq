@@ -8,11 +8,15 @@ import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.naming.InitialContext;
 
+import br.com.caelum.modelo.Pedido;
+import br.com.caelum.modelo.PedidoFactory;
+
+
 public class TesteProdutorTopico {
 
 	@SuppressWarnings("resource")
 	public static void main(String[] args) throws Exception {
-		
+		System.setProperty("org.apache.activemq.SERIALIZABLE_PACKAGES","*");
 		InitialContext context = new InitialContext();
 		ConnectionFactory factory = (ConnectionFactory) context.lookup("ConnectionFactory");
 		
@@ -23,9 +27,18 @@ public class TesteProdutorTopico {
 		Destination topico = (Destination) context.lookup("loja");
 		
 		MessageProducer producer = session.createProducer(topico);
-									
-        Message message = session.createTextMessage("<pedido><id>" + "123" + "</id></pedido>");
-		message.setBooleanProperty("ebook", true);
+		
+		Pedido pedido = new PedidoFactory().geraPedidoComValores();
+
+		// StringWriter writer = new StringWriter();
+		// JAXB.marshal(pedido, writer);
+		// String xml = writer.toString();
+
+		// Message message = session.createTextMessage(xml);
+		
+		Message message = session.createObjectMessage(pedido);
+									        
+		message.setBooleanProperty("ebook", false);
         producer.send(message);					//new Scanner(System.in).nextLine();
 		
 		session.close();

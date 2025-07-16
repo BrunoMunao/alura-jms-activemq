@@ -25,3 +25,4 @@ replay_pid*
 
 apache-activemq-5.12.0
 bin
+.vscode/
